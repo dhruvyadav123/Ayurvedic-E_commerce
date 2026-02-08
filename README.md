@@ -169,8 +169,11 @@ Role based access control
 
 📸 Screenshots
 <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/1b4a04ea-7ed9-495a-af7e-4f3038c0eb1c" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/b70c7346-a37c-4a49-91fe-3eb1047bc0ba" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/af1c6850-e23e-4e19-ba64-f5ee3e9a3d0d" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/b55336a8-3409-4463-ae79-7fff5a34f4d3" />
 
-(Add screenshots of Home, Product Page, Cart, Admin Dashboard)
+
 
 **📌 Future Improvements**
 Payment Gateway Integration

@@ -58,7 +58,9 @@ Multer (for image upload)
 Database
 MongoDB Atlas / Local MongoDB
 
-📁 Folder Structure
+
+**📁 Folder Structure**
+
 Ayurvedic-E_commerce/
 │
 ├── backend/

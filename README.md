@@ -1,0 +1,184 @@
+****🌿 Ayurvedic E-Commerce Web Application**
+
+An Ayurvedic E-Commerce Platform built using the MERN Stack where users can browse Ayurvedic products, add them to cart, place orders, and manage their profile.
+The platform also includes an Admin Dashboard to manage products, categories, users, and orders.
+
+**🚀 Features
+**👤 User Features****
+
+User Registration & Login (JWT Authentication)
+
+Browse Ayurvedic Products
+
+Product Categories (Juice, Tablets, Churna, etc.)
+
+Product Details Page
+
+Add to Cart & Remove from Cart
+
+Cart Item Count in Navbar
+
+Checkout Page
+
+Order Placement
+
+User Profile Management
+
+🛠️ Admin Features
+
+Admin Login
+
+Dashboard Overview
+
+Add / Update / Delete Products
+
+Manage Categories
+
+View Users
+
+View & Manage Orders
+
+**🧑‍💻 Tech Stack**
+**Frontend**
+React.js
+React Router DOM
+Tailwind CSS
+Axios
+Framer Motion
+React Icons
+
+**Backend**
+Node.js
+Express.js
+MongoDB
+Mongoose
+
+**JWT Authentication**
+Multer (for image upload)
+Database
+MongoDB Atlas / Local MongoDB
+
+📁 Folder Structure
+Ayurvedic-E_commerce/
+│
+├── backend/
+│   ├── config/
+│   │   ├── db.js
+│   │   └── jwt.js
+│   │
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   ├── productController.js
+│   │   ├── categoryController.js
+│   │   ├── orderController.js
+│   │   └── userController.js
+│   │
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Product.js
+│   │   ├── Category.js
+│   │   └── Order.js
+│   │
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   ├── productRoutes.js
+│   │   ├── categoryRoutes.js
+│   │   ├── orderRoutes.js
+│   │   └── userRoutes.js
+│   │
+│   ├── middleware/
+│   │   ├── authMiddleware.js
+│   │   └── adminMiddleware.js
+│   │
+│   ├── uploads/
+│   │   └── products/
+│   │
+│   ├── server.js
+│   └── package.json
+│
+├── frontend/
+│   ├── public/
+│   │   └── index.html
+│   │
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── ProductCard.jsx
+│   │   │   └── Loader.jsx
+│   │   │
+│   │   ├── pages/
+│   │   │   ├── Home.jsx
+│   │   │   ├── Shop.jsx
+│   │   │   ├── Category.jsx
+│   │   │   ├── Cart.jsx
+│   │   │   ├── Checkout.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Signup.jsx
+│   │   │   ├── Profile.jsx
+│   │   │   └── Admin/
+│   │   │       ├── Dashboard.jsx
+│   │   │       ├── Products.jsx
+│   │   │       ├── AddProduct.jsx
+│   │   │       ├── Orders.jsx
+│   │   │       └── Users.jsx
+│   │   │
+│   │   ├── context/
+│   │   │   ├── AuthContext.jsx
+│   │   │   └── CartContext.jsx
+│   │   │
+│   │   ├── services/
+│   │   │   └── api.js
+│   │   │
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── index.css
+│   │
+│   └── package.json
+│
+├── .gitignore
+├── README.md
+└── package.json
+
+**⚙️ Installation & Setup**
+1️⃣ Clone Repository
+git clone https://github.com/your-username/Ayurvedic-E_commerce.git
+
+**2️⃣ Backend Setup**
+cd backend
+npm install
+npm run server
+
+
+Create .env file:
+
+PORT=5000
+MONGO_URI=your_mongodb_url
+JWT_SECRET=your_secret_key
+
+**3️⃣ Frontend Setup**
+cd frontend
+npm install
+npm run dev
+
+**🔐 Authentication**
+JWT based authentication
+Protected routes for Admin
+Role based access control
+
+📸 Screenshots
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/1b4a04ea-7ed9-495a-af7e-4f3038c0eb1c" />
+
+(Add screenshots of Home, Product Page, Cart, Admin Dashboard)
+
+**📌 Future Improvements**
+Payment Gateway Integration
+Wishlist Feature
+Product Reviews & Ratings
+Order Tracking
+Email Notifications
+
+**🙌 Author**
+**Dhruv Yadav**
+Diploma in Computer Science Engineering
+MERN Stack Developer

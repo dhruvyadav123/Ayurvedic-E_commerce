@@ -63,7 +63,7 @@ MongoDB Atlas / Local MongoDB
 
 **⚙️ Installation & Setup**
 1️⃣ Clone Repository
-git clone https://github.com/your-username/Ayurvedic-E_commerce.git
+git clone https://github.com/dhruvyadav123/Ayurvedic-E_commerce.git
 
 **2️⃣ Backend Setup**
 cd backend

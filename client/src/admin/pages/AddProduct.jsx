@@ -35,6 +35,7 @@ export default function AddProduct({ onSuccess }) {
       Object.keys(form).forEach((k) => data.append(k, form[k]));
 
       await axios.post(API, data);
+      
 
       setForm({
         name: "",

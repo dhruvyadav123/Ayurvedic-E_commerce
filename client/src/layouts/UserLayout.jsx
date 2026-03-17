@@ -6,7 +6,7 @@ import ScrollToTop from "../components/common/ScrollToTop";
 export default function UserLayout() {
   return (
     <>
-      <ScrollToTop /> {/* 👈 YAHI ADD KARNA HAI */}
+      <ScrollToTop /> 
       <Navbar />
       <Outlet />
       <Footer />

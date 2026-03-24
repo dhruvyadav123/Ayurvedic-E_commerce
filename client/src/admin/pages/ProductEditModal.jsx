@@ -1,159 +1,225 @@
+// ProductEditModal.jsx
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import { FaTimes, FaSpinner, FaImage, FaSave } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const API = "http://localhost:3000/api/products";
 
 export default function ProductEditModal({ product, onClose, onUpdate }) {
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     name: product.name,
     price: product.price,
-    stock: product.stock,
     category: product.category,
-    image: null,
+    description: product.description || "",
+    stock: product.stock || 0,
   });
-
-  const [preview, setPreview] = useState(
-    product.image ? `http://localhost:3000${product.image}` : null
-  );
   const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(product.image ? `http://localhost:3000${product.image}` : null);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    if (files) {
-      setForm({ ...form, image: files[0] });
-      setPreview(URL.createObjectURL(files[0]));
-    } else {
-      setForm({ ...form, [name]: value });
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    const data = new FormData();
-    data.append("name", form.name);
-    data.append("price", form.price);
-    data.append("stock", form.stock);
-    data.append("category", form.category);
-    if (form.image) data.append("image", form.image);
-
+    
     try {
-      await axios.put(`${API}/${product._id}`, data);
-      onUpdate();   // refresh product list
-      onClose();    // close modal
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to update product");
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("price", formData.price);
+      data.append("category", formData.category);
+      data.append("description", formData.description);
+      data.append("stock", formData.stock);
+      if (imageFile) {
+        data.append("image", imageFile);
+      }
+      
+      await axios.put(`${API}/${product._id}`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      
+      toast.success("Product updated successfully!");
+      onUpdate();
+      onClose();
+    } catch (error) {
+      console.error("Error updating product:", error);
+      toast.error(error.response?.data?.message || "Failed to update product");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4"
-      onClick={onClose}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 md:p-8"
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+        onClick={onClose}
       >
-        <h2 className="text-2xl font-bold text-green-800 mb-6 text-center">
-          Edit Product 🌿
-        </h2>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name */}
-          <input
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Product Name"
-            required
-            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none"
-          />
-
-          {/* Price & Stock */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              name="price"
-              type="number"
-              value={form.price}
-              onChange={handleChange}
-              placeholder="Price"
-              required
-              className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none"
-            />
-            <input
-              name="stock"
-              type="number"
-              value={form.stock}
-              onChange={handleChange}
-              placeholder="Stock"
-              required
-              className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none"
-            />
-          </div>
-
-          {/* Category */}
-          <input
-            name="category"
-            value={form.category}
-            onChange={handleChange}
-            placeholder="Category"
-            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none"
-          />
-
-          {/* Image */}
-          <div>
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              onChange={handleChange}
-              className="block w-full text-sm text-gray-600
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:bg-green-100 file:text-green-700
-                hover:file:bg-green-200"
-            />
-
-            {preview && (
-              <img
-                src={preview}
-                alt="Preview"
-                className="mt-4 h-40 w-full object-cover rounded-xl border"
-              />
-            )}
-          </div>
-
-          {/* Buttons */}
-          <div className="flex justify-between pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-5 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 text-white"
-            >
-              Cancel
-            </button>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className={`px-6 py-2 rounded-lg text-white font-semibold transition
-                ${
-                  loading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-green-700 hover:bg-green-800"
-                }`}
-            >
-              {loading ? "Updating..." : "Update"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <form onSubmit={handleSubmit} className="p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-gray-800">Edit Product</h2>
+              <button
+                type="button"
+                onClick={onClose}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <FaTimes size={20} />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Product Image
+                </label>
+                <div className="flex items-center gap-4">
+                  {imagePreview && (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-20 h-20 object-cover rounded-lg"
+                    />
+                  )}
+                  <label className="flex-1 cursor-pointer">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-3 text-center hover:border-green-500 transition">
+                      <FaImage className="mx-auto text-gray-400 mb-1" />
+                      <span className="text-sm text-gray-500">Choose new image</span>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Product Name *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Price (₹) *
+                </label>
+                <input
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  required
+                  min="0"
+                  step="0.01"
+                  className="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Category *
+                </label>
+                <input
+                  type="text"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows="3"
+                  className="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Stock Quantity
+                </label>
+                <input
+                  type="number"
+                  name="stock"
+                  value={formData.stock}
+                  onChange={handleChange}
+                  min="0"
+                  className="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex-1 bg-green-700 text-white rounded-lg hover:bg-green-800 transition flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <FaSpinner className="animate-spin" /> Saving...
+                  </>
+                ) : (
+                  <>
+                    <FaSave /> Save Changes
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
